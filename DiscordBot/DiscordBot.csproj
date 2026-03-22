@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+      <UserSecretsId>477753cc-6feb-4518-a477-17448546bd66</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Discord.Net.Core" Version="3.19.1" />
+      <PackageReference Include="Discord.Net.WebSocket" Version="3.19.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="11.0.0-preview.2.26159.112" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="11.0.0-preview.2.26159.112" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="11.0.0-preview.2.26159.112" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0-preview.2.26159.112" />
+      <None Update="appsettings.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </None>
+    </ItemGroup>
+
+</Project>
