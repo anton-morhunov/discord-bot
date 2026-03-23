@@ -1,16 +1,16 @@
 using Discord.WebSocket;
-using DiscordBot.Services;
+using DiscordBot.Services.Interfaces;
 
 namespace DiscordBot.Commands;
 
 public class GameCommand : ICommand
 {
-    private readonly GameService _gameService;
+    private readonly IGameService _gameService;
 
     public string Name => "game";
     
     public GameCommand(
-        GameService gameService
+        IGameService gameService
         )
     {
         _gameService = gameService;
@@ -18,7 +18,7 @@ public class GameCommand : ICommand
     
     public async Task ExecuteAsync(SocketMessage message, string[] args)
     {
-        var games = _gameService.GetGames(args.ToList());
+        var games = _gameService.FindGameByTags(args.ToList());
 
         if (games.Count == 0)
         {

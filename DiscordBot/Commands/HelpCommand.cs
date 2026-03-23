@@ -1,17 +1,18 @@
 using Discord.WebSocket;
 using DiscordBot.Handlers;
 using DiscordBot.Services;
+using DiscordBot.Services.Interfaces;
 
 namespace DiscordBot.Commands;
 
 public class HelpCommand : ICommand
 {
-    private readonly GameService _gameService;
+    private readonly IGameService _gameService;
     
     public string Name => "help";
 
     public HelpCommand(
-        GameService gameService
+        IGameService gameService
     )
     {
         _gameService = gameService;

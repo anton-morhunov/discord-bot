@@ -1,17 +1,18 @@
 using Discord.WebSocket;
 using DiscordBot.Handlers;
 using DiscordBot.Services;
+using DiscordBot.Services.Interfaces;
 
 namespace DiscordBot.Commands;
 
 public class RandomCommand : ICommand
 {
-    private readonly GameService _gameService;
+    private readonly IGameService _gameService;
     
     public string Name => "random";
     
     public RandomCommand(
-        GameService gameService
+        IGameService gameService
         )
     {
         _gameService = gameService;
