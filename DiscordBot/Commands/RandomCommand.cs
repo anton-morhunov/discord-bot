@@ -1,6 +1,4 @@
 using Discord.WebSocket;
-using DiscordBot.Handlers;
-using DiscordBot.Services;
 using DiscordBot.Services.Interfaces;
 
 namespace DiscordBot.Commands;
@@ -20,13 +18,17 @@ public class RandomCommand : ICommand
 
     public async Task ExecuteAsync(SocketMessage message, string[] args)
     {
-        var games = _gameService.GetRandomGames();
+        int count = 3;
 
-        if (games == null)
+        if (args.Length > 0 && int.TryParse(args[0], out var parsed))
         {
-            await message.Channel.SendMessageAsync("No games found.");
+            count = parsed;
         }
+        
+        var games = await _gameService.GetRandomGames(count);
 
-        await message.Channel.SendMessageAsync($"Random game {games.Name}");
+        var response = string.Join("\n", games.Select(x => x.Name));
+        
+        await message.Channel.SendMessageAsync(response);
     }
 }

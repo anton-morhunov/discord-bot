@@ -21,9 +21,18 @@ public class EfGameRepository : IGameRepository
         foreach (var tag in tags)
         {
             var toLower = tag.ToLower();
-            query = query.Where(g => g.Tags.ToLower().Contains(toLower));
+            query = query
+                .Where(g => g.Tags.ToLower()
+                .Contains(toLower));
         }
 
         return await query.ToListAsync();
+    }
+
+    public async Task<List<GameModel>> GetAllGamesAsync()
+    {
+        return await _db.Games
+            .AsNoTracking()
+            .ToListAsync();
     }
 }
