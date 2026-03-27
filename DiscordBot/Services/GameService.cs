@@ -1,10 +1,19 @@
 using DiscordBot.Models;
+using DiscordBot.Repository.Interfaces;
 using DiscordBot.Services.Interfaces;
 
 namespace DiscordBot.Services;
 
 public class GameService : IGameService
 {
+    private readonly IGameRepository _gameRepository;
+
+    public GameService(
+        IGameRepository gameRepository
+        )
+    {
+        _gameRepository = gameRepository;
+    }
     public List<GameModel> _games = new List<GameModel>();
     
     public GameModel? GetRandomGames()
@@ -18,7 +27,7 @@ public class GameService : IGameService
         return _games[index];
     }
 
-    public List<GameModel> FindGameByTags(List<string> args)
+    /*public List<GameModel> FindGameByTags(List<string> args)
     {
         var result = new List<GameModel>();
         var temp = new List<(GameModel game, int score)>();
@@ -44,6 +53,37 @@ public class GameService : IGameService
         
         var sorted = temp.OrderByDescending(g => g.score);
 
+        result = sorted.Select(item => item.game).Take(3).ToList();
+        
+        return result;
+    }*/
+
+    public async Task<List<GameModel>> GetGameByTagsAsync(List<string> tags)
+    {
+        var getGames = await _gameRepository.FindByTagsAsync(tags);
+
+        var result = new List<GameModel>();
+        var temp = new List<(GameModel game, int score)>();
+
+        foreach (var game in getGames)
+        {
+            var score = 0;
+
+            foreach (var tag in tags)
+            {
+                if (game.Tags.Contains(tag))
+                {
+                    score++;
+                }
+            }
+
+            if (score > 0)
+            {
+                temp.Add((game, score));
+            }
+        }
+
+        var sorted = temp.OrderByDescending(g => g.score);
         result = sorted.Select(item => item.game).Take(3).ToList();
         
         return result;

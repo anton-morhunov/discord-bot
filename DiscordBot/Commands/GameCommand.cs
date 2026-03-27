@@ -18,7 +18,7 @@ public class GameCommand : ICommand
     
     public async Task ExecuteAsync(SocketMessage message, string[] args)
     {
-        var games = _gameService.FindGameByTags(args.ToList());
+        /*var games = _gameService.FindGameByTags(args.ToList());
 
         if (games.Count == 0)
         {
@@ -33,7 +33,23 @@ public class GameCommand : ICommand
             response += $"\n- {game.Name} " +
                         string.Join(", ", game.Tags);
         }
+
+        await message.Channel.SendMessageAsync(response);*/
         
+        var tags = args.Select(a => a.ToLower()).ToList();
+
+        var games = await _gameService.GetGameByTagsAsync(tags);
+
+        if (!games.Any())
+        {
+            await message.Channel.SendMessageAsync("No games found.");
+            return;
+        }
+
+        var response = string.Join("\n", games.Select(g => g.Name));
+
         await message.Channel.SendMessageAsync(response);
     }
+    
+    
 }
