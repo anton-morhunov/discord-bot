@@ -54,4 +54,20 @@ public class GameService : IGameService
         
         return result;
     }
+
+    public async Task<GameModel> AddGameAsync(string[] arg)
+    {
+        
+        var gameName = arg[0];
+        var tags = arg.Skip(1).ToList();
+        
+        var gameModel = new GameModel
+        {
+            Name = gameName,
+            Tags = string.Join(", ", tags)
+        };
+        
+        var result = await _gameRepository.AddGameAsync(gameModel);
+        return result;
+    }
 }

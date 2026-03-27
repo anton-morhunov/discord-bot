@@ -35,4 +35,12 @@ public class EfGameRepository : IGameRepository
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<GameModel> AddGameAsync(GameModel game)
+    {
+        await _db.Games.AddAsync(game);
+        _db.SaveChanges();
+
+        return game;
+    }
 }

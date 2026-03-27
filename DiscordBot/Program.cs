@@ -32,6 +32,7 @@ services.AddSingleton<CommandHandler>();
 services.AddSingleton<ICommand, GameCommand>();
 services.AddSingleton<ICommand, HelpCommand>();
 services.AddSingleton<ICommand, RandomCommand>();
+services.AddSingleton<ICommand, AddGameCommand>();
 
 var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true)
