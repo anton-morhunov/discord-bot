@@ -12,6 +12,6 @@ public class HelpCommand : ICommand
     public async Task ExecuteAsync(SocketMessage message, string[] args)
     {
         await message.Channel.SendMessageAsync(
-            "Avaliable commands: \n!game <tags>\n!help\n!addgame");
+            "Avaliable commands: \n!game <tags>\n!help\n!addgame\n!delete");
     }
 }

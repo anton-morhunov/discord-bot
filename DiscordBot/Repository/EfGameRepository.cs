@@ -43,4 +43,21 @@ public class EfGameRepository : IGameRepository
 
         return game;
     }
+
+    public async Task<GameModel?> FindGameByIdAsync(int id)
+    {
+        return await _db.Games.FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task DeleteGameAsync(int id)
+    {
+        var game = await _db.Games.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (game != null)
+        {
+            _db.Games.Remove(game);
+        }
+        
+        _db.SaveChanges();
+    }
 }

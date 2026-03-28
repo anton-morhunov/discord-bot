@@ -1,6 +1,6 @@
 namespace DiscordBot.Dto;
 
-public class GamesDto
+public class GamesAddDto
 {
     
 }

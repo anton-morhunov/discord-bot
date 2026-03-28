@@ -1,3 +1,4 @@
+using DiscordBot.Dto;
 using DiscordBot.Models;
 using DiscordBot.Repository.Interfaces;
 using DiscordBot.Services.Interfaces;
@@ -69,5 +70,35 @@ public class GameService : IGameService
         
         var result = await _gameRepository.AddGameAsync(gameModel);
         return result;
+    }
+
+    public async Task<GamesResponseDto?> FindGameByIdAsync(int id)
+    {
+        var game = await _gameRepository.FindGameByIdAsync(id);
+
+        if (game == null)
+        {
+            return null;
+        }
+
+        return new GamesResponseDto
+        {
+            Id = game.Id,
+            Name = game.Name,
+            Tags = game.Tags,
+        };
+    }
+
+    public async Task DeleteGameByIdAsync(int id)
+    {
+        var game = await _gameRepository.FindGameByIdAsync(id);
+
+        if (game == null)
+        {
+            throw new Exception("Game not found");
+            return;
+        }
+        
+        await _gameRepository.DeleteGameAsync(id);
     }
 }
