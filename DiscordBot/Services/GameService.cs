@@ -16,16 +16,22 @@ public class GameService : IGameService
         _gameRepository = gameRepository;
     }
 
-    public async Task<List<GameModel>> GetRandomGames(int count)
+    public async Task<List<GamesResponseDto>> GetRandomGames(int count)
     {
         var games = await _gameRepository.GetAllGamesAsync();
-
+        
         return games
             .OrderBy(x => Guid.NewGuid())
             .Take(count)
+            .Select(x => new GamesResponseDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Tags = x.Tags
+            })
             .ToList();
     }
-    public async Task<List<GameModel>> GetGameByTagsAsync(List<string> tags)
+    public async Task<List<GamesResponseDto>> GetGameByTagsAsync(List<string> tags)
     {
         var getGames = await _gameRepository.FindByTagsAsync(tags);
 
@@ -52,24 +58,35 @@ public class GameService : IGameService
 
         var sorted = temp.OrderByDescending(g => g.score);
         result = sorted.Select(item => item.game).Take(3).ToList();
-        
-        return result;
+
+        return result.Select(game => new GamesResponseDto
+        {
+            Name = game.Name,
+            Tags = game.Tags
+        }).ToList();
     }
 
-    public async Task<GameModel> AddGameAsync(string[] arg)
+    public async Task<GamesResponseDto> AddGameAsync(string[] arg)
     {
-        
         var gameName = arg[0];
         var tags = arg.Skip(1).ToList();
-        
-        var gameModel = new GameModel
+
+        GameModel gameModel = new GameModel
         {
             Name = gameName,
             Tags = string.Join(", ", tags)
         };
         
-        var result = await _gameRepository.AddGameAsync(gameModel);
-        return result;
+        var createGame = await _gameRepository.AddGameAsync(gameModel);
+
+        var response = new GamesResponseDto
+        {
+            Id = createGame.Id,
+            Name = createGame.Name,
+            Tags = createGame.Tags,
+        };
+        
+        return response;
     }
 
     public async Task<GamesResponseDto?> FindGameByIdAsync(int id)
