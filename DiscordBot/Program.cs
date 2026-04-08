@@ -11,8 +11,21 @@ using DiscordBot.Services;
 using DiscordBot.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 var services = new ServiceCollection();
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.File("logs/discord-bot.log", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+services.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddSerilog();
+});
 
 services.AddSingleton<IGameService, GameService>();
 services.AddSingleton<IGameRepository, EfGameRepository>();
