@@ -52,13 +52,23 @@ public class GameService : IGameService
         var result = new List<GameModel>();
         var temp = new List<(GameModel game, int score)>();
 
+        
         foreach (var game in getGames)
         {
             var score = 0;
+            
+            var gameTags = game.Tags
+                .Split(',')
+                .Select(x => x.Trim().ToLower())
+                .ToList();
 
             foreach (var tag in tags)
             {
-                if (game.Tags.Contains(tag))
+                var normalizedTags = tag
+                    .Trim()
+                    .ToLower();
+                
+                if (gameTags.Contains(normalizedTags))
                 {
                     score++;
                 }

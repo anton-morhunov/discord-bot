@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using DiscordBot.Handlers;
 using Microsoft.Extensions.Configuration;
 
-namespace DiscordBot;
+namespace DiscordBot.Services;
 
 public class BotService
 {
@@ -22,7 +22,7 @@ public class BotService
         _config = config;
     }
     
-    public async Task StartAsync()
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
         _client.MessageReceived += _commandHandler.HandleMessageAsync;
 
@@ -34,6 +34,11 @@ public class BotService
             validateToken);
         
         await _client.StartAsync();
+    }
+
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        await _client.StopAsync();
     }
     
 }

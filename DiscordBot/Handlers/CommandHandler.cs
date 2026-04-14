@@ -1,4 +1,5 @@
 using Discord.WebSocket;
+using DiscordBot.Commands;
 
 namespace DiscordBot.Handlers;
 public class CommandHandler
@@ -17,7 +18,7 @@ public class CommandHandler
         
         if (!content.StartsWith("!")) return;
 
-        var arg =  content.Substring(1);
+        var arg =  content.Substring(1).ToLower();
         var parts = arg.Split(' ');
         
         var command = parts[0].ToLower();

@@ -1,10 +1,10 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using DiscordBot;
 using DiscordBot.Commands;
 using DiscordBot.Data;
 using DiscordBot.Handlers;
+using DiscordBot.Hosting;
 using DiscordBot.Repository;
 using DiscordBot.Repository.Interfaces;
 using DiscordBot.Services;
@@ -12,7 +12,6 @@ using DiscordBot.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 
 var host = Host.CreateDefaultBuilder(args)
@@ -26,13 +25,7 @@ var host = Host.CreateDefaultBuilder(args)
     ).ConfigureServices((context, services) =>
     {
         var configuration = context.Configuration;
-
-        services.AddLogging(logging =>
-        {
-            logging.ClearProviders();
-            logging.AddSerilog();
-        });
-
+        
         services.AddSingleton<IGameService, GameService>();
         services.AddSingleton<IGameRepository, EfGameRepository>();
         services.AddSingleton<BotService>();

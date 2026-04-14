@@ -1,8 +1,10 @@
 using DiscordBot.Data;
+using DiscordBot.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace DiscordBot;
+namespace DiscordBot.Hosting;
 
 public class BotHostedService : IHostedService
 {
@@ -22,13 +24,14 @@ public class BotHostedService : IHostedService
     {
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        DbSeeder.Seed(context);
         
-        await _botService.StartAsync();
+        context.Database.Migrate();
+        
+        await _botService.StartAsync(cancellationToken);
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await _botService.StopAsync(cancellationToken);
     }
 }
