@@ -3,8 +3,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN dotnet restore DiscordBot.csproj
-RUN dotnet publish DiscordBot.csproj -c Release -o out
+RUN dotnet restore DiscordBot/DiscordBot.csproj
+RUN dotnet publish DiscordBot/DiscordBot.csproj -c Release -o /app/out
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
