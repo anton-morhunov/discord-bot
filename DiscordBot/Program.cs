@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Interactions;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using DiscordBot.Commands;
@@ -47,6 +48,11 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<ICommand, AddGameCommand>();
         services.AddSingleton<ICommand, DeleteCommand>();
         services.AddSingleton<ICommand, FindByIdCommand>();
+        services.AddSingleton(x =>
+        {
+            var client = x.GetRequiredService<DiscordSocketClient>();
+            return new InteractionService(client.Rest);
+        });
 
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: true)

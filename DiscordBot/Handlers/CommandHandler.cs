@@ -16,7 +16,7 @@ public class CommandHandler
         
         var content = socketMessage.Content.Trim();
         
-        if (!content.StartsWith("!")) return;
+        if (!content.StartsWith("/")) return;
 
         var arg =  content.Substring(1).ToLower();
         var parts = arg.Split(' ');
