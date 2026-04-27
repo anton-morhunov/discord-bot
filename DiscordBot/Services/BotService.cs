@@ -48,20 +48,29 @@ public class BotService
             await _interactionService.ExecuteCommandAsync(ctx, _services);
         };
         
+        
         await _client.LoginAsync(TokenType.Bot,
             token, 
             validateToken);
         
+        bool commandRegistered = false;
         await _client.StartAsync();
-
+        
         _client.Ready += async () =>
         {
+            if (commandRegistered) return;
+            commandRegistered = true;
+            
             await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
             var guildId = _config.GetValue<ulong>("DiscordId:GuildId");
+            
+            var guild = _client.GetGuild(guildId);
+            await guild.DeleteApplicationCommandsAsync();
+            
             if (_environment.IsDevelopment())
             {
-                await _interactionService.RegisterCommandsToGuildAsync(guildId);
+                await _interactionService.RegisterCommandsToGuildAsync(guildId, true);
             }
             else
             {

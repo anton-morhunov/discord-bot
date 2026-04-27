@@ -7,7 +7,7 @@ public class DeleteCommand : ICommand
 {
     private readonly IGameService _gameService;
     
-    public string Name => "delete";
+    public string Name => "deletegame";
     
     public DeleteCommand(
         IGameService gameService
