@@ -3,6 +3,7 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using DiscordBot.Commands;
+using DiscordBot.Converts;
 using DiscordBot.Data;
 using DiscordBot.Handlers;
 using DiscordBot.Hosting;
@@ -42,8 +43,6 @@ var host = Host.CreateDefaultBuilder(args)
             return new DiscordSocketClient(config);
         });
         services.AddSingleton<CommandHandler>();
-        services.AddSingleton<ICommand, GameCommand>();
-        services.AddSingleton<ICommand, HelpCommand>();
         services.AddSingleton<ICommand, RandomCommand>();
         services.AddSingleton<ICommand, AddGameCommand>();
         services.AddSingleton<ICommand, DeleteCommand>();
@@ -65,6 +64,15 @@ var host = Host.CreateDefaultBuilder(args)
 
         services.AddSingleton<IConfiguration>(config);
         services.AddHostedService<BotHostedService>();
+        services.AddSingleton(x =>
+        {
+            var client = x.GetRequiredService<DiscordSocketClient>();
+            var service = new  InteractionService(client.Rest);
+            
+            service.AddTypeConverter<List<string>>(new StringListTypeConverter());
+            
+            return service;
+        });
     }).Build();
     
 await host.RunAsync();
